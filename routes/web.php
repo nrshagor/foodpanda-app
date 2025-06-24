@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,12 +39,18 @@ Route::get('/sso-login', function (Request $request) {
     }
 });
 
-Route::post('/sso-logout', function (Request $request) {
+// Route::post('logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+Route::get('/sso-logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
+
     return response()->json(['message' => 'Logged out from foodpanda']);
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
