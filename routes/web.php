@@ -48,8 +48,9 @@ Route::get('/sso-logout', function (Request $request) {
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return response()->json(['message' => 'Logged out from foodpanda']);
+    return redirect('/login'); // Optional: redirect to login
 });
+
 
 
 Route::middleware('auth')->group(function () {
