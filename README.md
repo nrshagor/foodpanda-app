@@ -1,61 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Foodpanda App (Laravel 12)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is the secondary system in a multi-system login architecture. It accepts a secure login token from the `ecommerce-app` and automatically logs the user in.
 
-## About Laravel
+## 🔧 Laravel Version
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   Laravel: **v12**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 Setup Guide
 
-## Learning Laravel
+### 1. Clone the Repository
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+git clone https://github.com/nrshagor/foodpanda-app.git
+cd ecommerce-app
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 2. Install Dependencies
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+composer install
+npm install
+npm run build
+```
 
-## Laravel Sponsors
+### 3. Configure .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
+```
 
-### Premium Partners
+#### Update the following lines in .env:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+APP_NAME=Foodpanda
+APP_URL=http://foodpanda.local:8001
 
-## Contributing
+DB_CONNECTION=mysql
+DB_DATABASE=foodpanda-app
+DB_USERNAME=root
+DB_PASSWORD=
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+SESSION_DOMAIN=.local
+SESSION_COOKIE=shared_session
 
-## Code of Conduct
+# Use same APP_KEY as foodpanda-app
+APP_KEY=base64:YOUR_SHARED_APP_KEY
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
 
-## Security Vulnerabilities
+### 4. Generate Application Key
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
 
-## License
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+##### ⚠️ Make sure this APP_KEY is identical to the one in ecommerce-app.
+
+### 5. Run Migrations
+
+```bash
+php artisan migrate
+```
+
+### 6. Serve the App
+
+```bash
+php artisan serve --host=foodpanda.local --port=8001
+
+```
+
+##### Make sure ecommerce.local is mapped in your hosts file:
+
+```bash
+127.0.0.1 foodpanda.local
+
+```
+
+#### The hosts file on Windows is located here:
+
+```bash
+C:\Windows\System32\drivers\etc\hosts
+```
+
+#### Add these lines at the bottom:
+
+```bash
+127.0.0.1 ecommerce.local
+127.0.0.1 foodpanda.local
+```
+
+### 🔐 Auth & SSO
+
+-   Accepts secure login tokens from ecommerce-app
+-   Automatically logs in the user if token is valid
+-   Logout can be triggered via /sso-logout
+
+### ✅ Features
+
+-   SSO-based login (no form needed)
+-   Dashboard
+-   Logout endpoint callable from parent system
+
+### 🧪 Testing
+
+-   Log in to: http://ecommerce.local:8000
+
+-   Ecommerce app will open: http://foodpanda.local:8001/sso-login?token=...
+
+-   You’ll be automatically logged in if token is valid.
+
+### 📂 Related App
+
+Make sure to run Ecommerce App before testing this.
